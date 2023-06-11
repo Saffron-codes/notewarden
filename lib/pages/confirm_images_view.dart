@@ -33,7 +33,7 @@ class ConfirmImagesView extends StatelessWidget {
             onPressed: (){
               
               viewModel.addMedia(collection: collection, filePath: imageViewModel.imagePath);
-              Navigator.pushReplacementNamed(context, "/");
+              Navigator.pushReplacementNamed(context, "/collections");
             },
             child: changeFAB(viewModel.addMediaState)
             // const Icon(Icons.done),

@@ -41,7 +41,7 @@ class _SelectCollectionsViewState extends State<SelectCollectionsView> {
                 return CollectionTile(
                   collection: viewModel.collections[index],
                   onPressed: () =>
-                      Navigator.pushNamed(context, '/confirm_images',arguments: viewModel.collections[index]),
+                      Navigator.pushReplacementNamed(context, '/confirm_images',arguments: viewModel.collections[index]),
                 );
               },
               itemCount: viewModel.collections.length,
