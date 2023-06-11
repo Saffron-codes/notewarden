@@ -23,7 +23,6 @@ class DeciderView extends StatelessWidget {
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.data != null){
             Provider.of<ImagesProvider>(context,listen: false).changeImagePath(snapshot.data);
-            // print("PATH -> ${Provider.of<ImagesProvider>(context,listen: false).imagePath}");
             return const SelectCollectionsView();
           }
           else{

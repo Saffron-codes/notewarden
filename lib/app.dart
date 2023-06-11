@@ -11,6 +11,8 @@ import 'package:note_warden/pages/collection_detailed_view.dart';
 import 'package:note_warden/pages/decider_view.dart';
 import 'package:note_warden/pages/select_collections_view.dart';
 
+import 'pages/collections_view.dart';
+
 class NoteWarden extends StatelessWidget {
   const NoteWarden({super.key});
 
@@ -39,6 +41,7 @@ class NoteWarden extends StatelessWidget {
         initialRoute: "/",
         routes: {
           "/": (context) => const DeciderView(),
+          "/collections":(context) => CollectionsView(),
           "/collection": (context) => const CollectionDetailedView(),
           "/collection/choose": (context) => const SelectCollectionsView(),
           "/confirm_images": (context) => const ConfirmImagesView()
