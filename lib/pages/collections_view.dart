@@ -81,7 +81,7 @@ class _CollectionsViewState extends State<CollectionsView> {
               itemBuilder: (context, index) {
                 return CollectionTile(
                   collection: viewModel.collections[index],
-                  onPressed: () => Navigator.pushNamed(context, '/collection'),
+                  onPressed: () => Navigator.pushNamed(context, '/collection',arguments: viewModel.collections[index]),
                 );
               },
               itemCount: viewModel.collections.length,
