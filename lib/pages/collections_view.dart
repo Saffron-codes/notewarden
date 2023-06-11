@@ -42,9 +42,11 @@ class _CollectionsViewState extends State<CollectionsView> {
     } else {
       return [
         MaterialButton(
-          onPressed: (){
-            viewModel.addCollection(name: nameController.text);
-            nameController.clear();
+          onPressed: () {
+            if (nameController.text.isNotEmpty) {
+              viewModel.addCollection(name: nameController.text);
+              nameController.clear();
+            }
           },
           color: Colors.deepOrange,
           child: const Text("Add"),
@@ -57,10 +59,9 @@ class _CollectionsViewState extends State<CollectionsView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    Provider.of<CollectionProvider>(context, listen: false).loadCollections();
+      Provider.of<CollectionProvider>(context, listen: false).loadCollections();
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,6 @@ class _CollectionsViewState extends State<CollectionsView> {
       ),
       body: Consumer<CollectionProvider>(
         builder: (context, viewModel, child) {
-          // print("VM :-> ${viewModel.addCollectionState}");
           if (viewModel.loadCollectionsState == TaskState.loading) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -79,12 +79,14 @@ class _CollectionsViewState extends State<CollectionsView> {
           } else if (viewModel.loadCollectionsState == TaskState.success) {
             return ListView.builder(
               itemBuilder: (context, index) {
-                return CollectionTile(collection: viewModel.collections[index],onPressed: ()=>Navigator.pushNamed(context, '/collection'),);
+                return CollectionTile(
+                  collection: viewModel.collections[index],
+                  onPressed: () => Navigator.pushNamed(context, '/collection'),
+                );
               },
               itemCount: viewModel.collections.length,
             );
-          }
-          else{
+          } else {
             return const Text("None");
           }
         },
