@@ -12,7 +12,6 @@ class MediaProvider extends ChangeNotifier {
 
   MediaProvider({required this.mediaService});
 
-
   TaskState _addMediaState = TaskState.none;
 
   TaskState _loadMediaState = TaskState.none;
@@ -23,12 +22,12 @@ class MediaProvider extends ChangeNotifier {
 
   List<Media> get media => _media;
 
-
-    void addMedia({required Collection collection, required String filePath}) async {
+  void addMedia(
+      {required Collection collection, required String filePath}) async {
     try {
       _addMediaState = TaskState.loading;
       notifyListeners();
-      await mediaService.saveMedia(collection: collection,filePath: filePath);
+      await mediaService.saveMedia(collection: collection, filePath: filePath);
       _addMediaState = TaskState.success;
       notifyListeners();
     } catch (e) {
@@ -41,9 +40,14 @@ class MediaProvider extends ChangeNotifier {
     _loadMediaState = TaskState.loading;
     notifyListeners();
     await Future.delayed(const Duration(milliseconds: 100));
-    _media =  await mediaService.loadMedia(collectionId: collectionId);
+    _media = await mediaService.loadMedia(collectionId: collectionId);
     _loadMediaState = TaskState.success;
     // _addMediaState = TaskState.none;
+    notifyListeners();
+  }
+
+  void resetMedia() async {
+    _media = [];
     notifyListeners();
   }
 }

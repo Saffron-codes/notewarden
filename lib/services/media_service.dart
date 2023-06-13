@@ -16,13 +16,12 @@ class MediaService {
     final rawMedia = await db
         .query("Media", where: "collectionId = ?", whereArgs: [collectionId]);
     return List<Media>.from(
-        rawMedia.map((model) => Collection.fromJson(model)));
+        rawMedia.map((model) => Media.fromJson(model)));
   }
-
 
   Future<void> saveMedia(
       {required Collection collection, required String filePath}) async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted) {
       Directory? externalDirectory = await getExternalStorageDirectory();
 
       if (externalDirectory != null) {
@@ -63,6 +62,7 @@ class MediaService {
         throw Exception('External storage directory not available.');
       }
     } else {
+      openAppSettings();
       return;
     }
   }
