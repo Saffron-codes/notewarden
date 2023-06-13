@@ -12,15 +12,17 @@ class CollectionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
         height: 60,
-        child: ListTile(
-          title: Row(
-            children: [
-              Expanded(child: Text(collection.name),),
-              Text(formatDateTimeAgo(collection.createdAt),style: const TextStyle(fontSize: 10)),
-            ],
+        child: Card(
+          child: ListTile(
+            title: Row(
+              children: [
+                Expanded(child: Text(collection.name),),
+                Text(formatDateTimeAgo(collection.createdAt),style: const TextStyle(fontSize: 10)),
+              ],
+            ),
+            // subtitle: Text("10 Notes"),
+            onTap:onPressed,
           ),
-          // subtitle: Text("10 Notes"),
-          onTap:onPressed,
         ),
       );
   }
