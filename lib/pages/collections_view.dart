@@ -41,14 +41,29 @@ class _CollectionsViewState extends State<CollectionsView> {
       return [const Text("Failure")];
     } else {
       return [
-        MaterialButton(
+        ElevatedButton(
+          onPressed: () {
+            // Handle cancel button press
+            Navigator.of(context).pop();
+          },
+          child: Text("Cancel"),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.error, 
+            foregroundColor: Theme.of(context).colorScheme.onError,
+          ),
+        ),
+        ElevatedButton(
           onPressed: () {
             if (nameController.text.isNotEmpty) {
               viewModel.addCollection(name: nameController.text);
               nameController.clear();
             }
           },
-          color: Colors.deepOrange,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            // foregroundColor: Colors.white // Set the button color to deep orange
+          ),
           child: const Text("Add"),
         )
       ];
@@ -67,7 +82,7 @@ class _CollectionsViewState extends State<CollectionsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("NoteWarden"),
+        title: const Text("Note Warden"),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Consumer<CollectionProvider>(
@@ -81,7 +96,8 @@ class _CollectionsViewState extends State<CollectionsView> {
               itemBuilder: (context, index) {
                 return CollectionTile(
                   collection: viewModel.collections[index],
-                  onPressed: () => Navigator.pushNamed(context, '/collection',arguments: viewModel.collections[index]),
+                  onPressed: () => Navigator.pushNamed(context, '/collection',
+                      arguments: viewModel.collections[index]),
                 );
               },
               itemCount: viewModel.collections.length,
