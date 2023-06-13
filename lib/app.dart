@@ -33,15 +33,21 @@ class NoteWarden extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'NoteWarden',
+        title: 'Note Warden',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
           useMaterial3: true,
         ),
+        darkTheme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff0F547D),brightness: Brightness.dark,onPrimary: Color(0xff2D2F31)),
+          useMaterial3: true,
+        ),
+        themeMode: ThemeMode.system,
         initialRoute: "/",
         routes: {
           "/": (context) => const DeciderView(),
-          "/collections":(context) => CollectionsView(),
+          "/collections": (context) => CollectionsView(),
           "/collection": (context) => const CollectionDetailedView(),
           "/collection/choose": (context) => const SelectCollectionsView(),
           "/confirm_images": (context) => const ConfirmImagesView()
