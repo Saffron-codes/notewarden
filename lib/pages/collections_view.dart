@@ -43,14 +43,13 @@ class _CollectionsViewState extends State<CollectionsView> {
       return [
         ElevatedButton(
           onPressed: () {
-            // Handle cancel button press
             Navigator.of(context).pop();
           },
-          child: Text("Cancel"),
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.error, 
             foregroundColor: Theme.of(context).colorScheme.onError,
           ),
+          child: const Text("Cancel"),
         ),
         ElevatedButton(
           onPressed: () {
@@ -62,7 +61,6 @@ class _CollectionsViewState extends State<CollectionsView> {
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.primary,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,
-            // foregroundColor: Colors.white // Set the button color to deep orange
           ),
           child: const Text("Add"),
         )

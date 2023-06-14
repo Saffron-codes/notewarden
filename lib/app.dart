@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_warden/injection_container.dart';
 import 'package:note_warden/pages/confirm_images_view.dart';
+import 'package:note_warden/pages/media_detailed_view.dart';
 import 'package:note_warden/providers/collection_provider.dart';
 import 'package:note_warden/providers/images_provider.dart';
 import 'package:note_warden/providers/media_provider.dart';
@@ -50,7 +51,8 @@ class NoteWarden extends StatelessWidget {
           "/collections": (context) => CollectionsView(),
           "/collection": (context) => const CollectionDetailedView(),
           "/collection/choose": (context) => const SelectCollectionsView(),
-          "/confirm_images": (context) => const ConfirmImagesView()
+          "/confirm_images": (context) => const ConfirmImagesView(),
+          "/media/detailed":(context) => const MediaDetailedView()
         },
       ),
     );

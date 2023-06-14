@@ -68,7 +68,7 @@ class _CollectionDetailedViewState extends State<CollectionDetailedView> {
       ),
       body: Consumer<MediaProvider>(builder: (context, viewModel, child) {
         if (viewModel.loadMediaState == TaskState.loading) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (viewModel.loadMediaState == TaskState.success) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -81,16 +81,19 @@ class _CollectionDetailedViewState extends State<CollectionDetailedView> {
               ),
               itemCount: viewModel.media.length,
               itemBuilder: (context, index) {
-                return Container(
-                    height: 200.0, // Fixed height for the card
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: FileImage(File(viewModel.media[index]
-                            .location)), // Replace with your image path
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ));
+                return GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, "/media/detailed",arguments: {"media":viewModel.media,"firstImg":index}),
+                  child: Container(
+                      height: 200.0, // Fixed height for the card
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: FileImage(File(viewModel.media[index]
+                              .location)), // Replace with your image path
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(10.0),
+                      )),
+                );
               },
             ),
           );
