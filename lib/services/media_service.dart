@@ -21,7 +21,7 @@ class MediaService {
 
   Future<void> saveMedia(
       {required Collection collection, required String filePath}) async {
-    if (await Permission.manageExternalStorage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted || await Permission.storage.request().isGranted) {
       Directory? externalDirectory = await getExternalStorageDirectory();
 
       if (externalDirectory != null) {
