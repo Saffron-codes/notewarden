@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:note_warden/services/cache_service.dart';
 import 'package:note_warden/services/collection_service.dart';
 import 'package:note_warden/utils/enums.dart';
 
@@ -9,10 +10,11 @@ class CollectionProvider extends ChangeNotifier {
   int _mediaCount = 0;
 
   final CollectionService collectionService;
+  final CacheService cacheService;
 
-  CollectionProvider({required this.collectionService});
+  CollectionProvider(
+      {required this.collectionService, required this.cacheService});
 
-  
   TaskState _addCollectionState = TaskState.none;
 
   TaskState _loadCollectionsState = TaskState.none;
@@ -24,7 +26,6 @@ class CollectionProvider extends ChangeNotifier {
   TaskState get addCollectionState => _addCollectionState;
 
   TaskState get loadCollectionsState => _loadCollectionsState;
-
 
   void addCollection({required String name}) async {
     try {
@@ -45,15 +46,22 @@ class CollectionProvider extends ChangeNotifier {
     _loadCollectionsState = TaskState.loading;
     notifyListeners();
     await Future.delayed(const Duration(milliseconds: 100));
-    _collections =  await collectionService.loadCollections();
+    _collections = await collectionService.loadCollections();
+    var listOrderType = cacheService.getData("listorder");
+    if (listOrderType.isNotEmpty && listOrderType == "byCreation") {
+      _collections.sort((a, b) => DateTime.now().compareTo(b.createdAt));
+      notifyListeners();
+    } else {
+      _collections.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+      notifyListeners();
+    }
     _loadCollectionsState = TaskState.success;
     _addCollectionState = TaskState.none;
     notifyListeners();
   }
 
-  void loadMediaCount({required int collectionId})async{
-    int count = await collectionService.getMediaCount(collectionId: collectionId);
-    _mediaCount = count;
-    notifyListeners();
+  void deleteCollection(Collection collection) async {
+    await collectionService.deleteCollection(collection);
+    loadCollections();
   }
 }

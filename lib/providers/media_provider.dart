@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:note_warden/models/media.dart';
 import 'package:note_warden/services/media_service.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import '../models/collection_model.dart';
 import '../utils/enums.dart';
@@ -16,18 +17,34 @@ class MediaProvider extends ChangeNotifier {
 
   TaskState _loadMediaState = TaskState.none;
 
+  TaskState _deleteMediaState = TaskState.none;
+
   TaskState get addMediaState => _addMediaState;
 
   TaskState get loadMediaState => _loadMediaState;
 
+  TaskState get deleteMediaState => _deleteMediaState;
+
   List<Media> get media => _media;
 
   void addMedia(
-      {required Collection collection, required String filePath}) async {
+      {required Collection collection,
+      List<SharedMediaFile>? filePaths,
+      List<String>? pathsfromPicker}) async {
     try {
       _addMediaState = TaskState.loading;
       notifyListeners();
-      await mediaService.saveMedia(collection: collection, filePath: filePath);
+      if (filePaths != null) {
+        for (var mediaFile in filePaths) {
+          await mediaService.saveMedia(
+              collection: collection, filePath: mediaFile.path);
+        }
+      } else {
+        for (var path in pathsfromPicker!) {
+          await mediaService.saveMedia(collection: collection, filePath: path);
+        }
+      }
+
       _addMediaState = TaskState.success;
       notifyListeners();
     } catch (e) {
@@ -39,7 +56,6 @@ class MediaProvider extends ChangeNotifier {
   void loadMedia({required int collectionId}) async {
     _loadMediaState = TaskState.loading;
     notifyListeners();
-    await Future.delayed(const Duration(milliseconds: 100));
     _media = await mediaService.loadMedia(collectionId: collectionId);
     _loadMediaState = TaskState.success;
     // _addMediaState = TaskState.none;
@@ -49,5 +65,19 @@ class MediaProvider extends ChangeNotifier {
   void resetMedia() async {
     _media = [];
     notifyListeners();
+  }
+
+  void deleteMedia(Media media,int index) async {
+    _deleteMediaState = TaskState.loading;
+    notifyListeners();
+    try {
+      await mediaService.deleteMedia(media: media);
+      _media.removeAt(index);
+      _deleteMediaState = TaskState.success;
+      notifyListeners();
+    } on Exception  {
+      _deleteMediaState = TaskState.failure;
+      notifyListeners();
+    }
   }
 }

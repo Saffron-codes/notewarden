@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:note_warden/providers/collection_provider.dart';
 import 'package:note_warden/utils/enums.dart';
+import 'package:note_warden/widgets/collection_list_shimmer.dart';
+import 'package:note_warden/widgets/empty_list_guide.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/collection_tile.dart';
@@ -46,8 +48,8 @@ class _CollectionsViewState extends State<CollectionsView> {
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.error, 
-            foregroundColor: Theme.of(context).colorScheme.onError,
+            // backgroundColor: Theme.of(context).colorScheme.error, 
+            // foregroundColor: Theme.of(context).colorScheme.onError,
           ),
           child: const Text("Cancel"),
         ),
@@ -81,16 +83,25 @@ class _CollectionsViewState extends State<CollectionsView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Note Warden"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions:  [
+          IconButton(
+            icon: const Icon(Icons.settings,),
+            tooltip: "Settings",
+            onPressed: () {
+              Navigator.pushNamed(context, "/settings");
+            },
+          )
+        ],
       ),
       body: Consumer<CollectionProvider>(
         builder: (context, viewModel, child) {
           if (viewModel.loadCollectionsState == TaskState.loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const CollectionListShimmer();
           } else if (viewModel.loadCollectionsState == TaskState.success) {
-            return ListView.builder(
+            return viewModel.collections.isNotEmpty?
+            ListView.builder(
+              padding: const EdgeInsets.all(8),
               itemBuilder: (context, index) {
                 return CollectionTile(
                   collection: viewModel.collections[index],
@@ -99,9 +110,10 @@ class _CollectionsViewState extends State<CollectionsView> {
                 );
               },
               itemCount: viewModel.collections.length,
-            );
+            ):
+            EmptyListGuide(isForCollection: true,);
           } else {
-            return const Text("None");
+            return const CollectionListShimmer();
           }
         },
       ),

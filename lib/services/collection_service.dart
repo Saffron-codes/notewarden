@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'package:note_warden/models/collection_model.dart';
@@ -37,17 +40,38 @@ class CollectionService {
     }
   }
 
-  Future<int> getMediaCount({required int collectionId}) async {
-    List<Map<String, dynamic>> result = await db.rawQuery(
-        'SELECT COUNT(*) AS mediaCount FROM Media WHERE collectionId = ?',
-        [collectionId]);
-    
-    // logger.i(result);
-    
-    int? mediaCount = Sqflite.firstIntValue(result);
+  // Future<int> getMediaCount({required int collectionId}) async {
+  //   List<Map<String, dynamic>> result = await db.rawQuery(
+  //       'SELECT COUNT(*) AS mediaCount FROM Media WHERE collectionId = ?',
+  //       [collectionId]);
 
-    // logger.i(mediaCount);
+  //   // logger.i(result);
 
-    return mediaCount ?? 0;
+  //   int? mediaCount = Sqflite.firstIntValue(result);
+
+  //   // logger.i(mediaCount);
+
+  //   return mediaCount ?? 0;
+  // }
+
+  Future<void> deleteCollection(Collection collection) async {
+    Directory? externalDirectory = await getExternalStorageDirectory();
+    if (externalDirectory != null) {
+      Directory subDirectory =
+          Directory('${externalDirectory.path}/NoteWarden/${collection.name}');
+      if (subDirectory.existsSync()) {
+        subDirectory.listSync().forEach((entity) {
+          if (entity is File) {
+            entity.deleteSync();
+          }
+        });
+      }
+
+      db.delete("Media", where: "collectionId=?", whereArgs: [collection.id]);
+
+      db.delete("Collection", where: "id=?", whereArgs: [collection.id]);
+    } else {
+      return;
+    }
   }
 }
