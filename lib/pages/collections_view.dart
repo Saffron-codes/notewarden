@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:note_warden/providers/collection_provider.dart';
 import 'package:note_warden/utils/enums.dart';
+import 'package:note_warden/widgets/collection_list_shimmer.dart';
+import 'package:note_warden/widgets/empty_list_guide.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/collection_tile.dart';
@@ -41,12 +43,27 @@ class _CollectionsViewState extends State<CollectionsView> {
       return [const Text("Failure")];
     } else {
       return [
-        MaterialButton(
-          onPressed: (){
-            viewModel.addCollection(name: nameController.text);
-            nameController.clear();
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
           },
-          color: Colors.deepOrange,
+          style: ElevatedButton.styleFrom(
+            // backgroundColor: Theme.of(context).colorScheme.error, 
+            // foregroundColor: Theme.of(context).colorScheme.onError,
+          ),
+          child: const Text("Cancel"),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (nameController.text.isNotEmpty) {
+              viewModel.addCollection(name: nameController.text);
+              nameController.clear();
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          ),
           child: const Text("Add"),
         )
       ];
@@ -57,35 +74,46 @@ class _CollectionsViewState extends State<CollectionsView> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    Provider.of<CollectionProvider>(context, listen: false).loadCollections();
+      Provider.of<CollectionProvider>(context, listen: false).loadCollections();
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("NoteWarden"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text("Note Warden"),
+        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions:  [
+          IconButton(
+            icon: const Icon(Icons.settings,),
+            tooltip: "Settings",
+            onPressed: () {
+              Navigator.pushNamed(context, "/settings");
+            },
+          )
+        ],
       ),
       body: Consumer<CollectionProvider>(
         builder: (context, viewModel, child) {
-          // print("VM :-> ${viewModel.addCollectionState}");
           if (viewModel.loadCollectionsState == TaskState.loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const CollectionListShimmer();
           } else if (viewModel.loadCollectionsState == TaskState.success) {
-            return ListView.builder(
+            return viewModel.collections.isNotEmpty?
+            ListView.builder(
+              padding: const EdgeInsets.all(8),
               itemBuilder: (context, index) {
-                return CollectionTile(collection: viewModel.collections[index],onPressed: ()=>Navigator.pushNamed(context, '/collection'),);
+                return CollectionTile(
+                  collection: viewModel.collections[index],
+                  onPressed: () => Navigator.pushNamed(context, '/collection',
+                      arguments: viewModel.collections[index]),
+                );
               },
               itemCount: viewModel.collections.length,
-            );
-          }
-          else{
-            return const Text("None");
+            ):
+            EmptyListGuide(isForCollection: true,);
+          } else {
+            return const CollectionListShimmer();
           }
         },
       ),

@@ -4,3 +4,9 @@ enum TaskState {
   success,
   failure
 }
+
+
+enum ListOrder {
+  byCreation,
+  byModification
+}

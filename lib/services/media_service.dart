@@ -8,21 +8,22 @@ import 'package:logger/logger.dart';
 
 class MediaService {
   final Database db;
-  Logger logger = Logger();
+  late Logger logger;
 
-  MediaService(this.db);
+  MediaService(this.db){
+    logger = Logger();
+  }
 
   Future<List<Media>> loadMedia({required int collectionId}) async {
     final rawMedia = await db
         .query("Media", where: "collectionId = ?", whereArgs: [collectionId]);
     return List<Media>.from(
-        rawMedia.map((model) => Collection.fromJson(model)));
+        rawMedia.map((model) => Media.fromJson(model)));
   }
-
 
   Future<void> saveMedia(
       {required Collection collection, required String filePath}) async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.manageExternalStorage.request().isGranted || await Permission.storage.request().isGranted) {
       Directory? externalDirectory = await getExternalStorageDirectory();
 
       if (externalDirectory != null) {
@@ -63,6 +64,7 @@ class MediaService {
         throw Exception('External storage directory not available.');
       }
     } else {
+      openAppSettings();
       return;
     }
   }
@@ -81,12 +83,30 @@ class MediaService {
 
     print("INSERTED Media ID  : $id");
 
+    // Update the [updatedAt] value to [DateTime.now()]
+
+    await db.update("Collection", {"updatedAt":dt.toIso8601String()},where: 'id=?',whereArgs: [collectionId]);
+
+    // log the task
+    logger.i("Updated the [updatedAt] value to [DateTime.now()]");
+
     mediaJson['id'] = id;
 
     if (id != 0) {
       return Media.fromJson(mediaJson);
     } else {
       throw Exception("Collection error");
+    }
+  }
+
+  Future<void> deleteMedia({required Media media})async{
+    File file = File(media.location);
+
+    try {
+      file.deleteSync();
+      await db.delete("Media",where: "id=?",whereArgs: [media.id]);
+    } catch (e) {
+      throw Exception("Delete Media Error");
     }
   }
 }
