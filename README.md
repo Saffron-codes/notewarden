@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../note_warden/assets/app_icon.png" height="128">
+  <img src="./assets/app_icon.png" height="128" style="border-radius: 10px;">
   <h1 align="center">Note Warden</h1>
 </p>
 
