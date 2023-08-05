@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_warden/providers/collection_provider.dart';
+import 'package:note_warden/search/collection_search/collection_search_delegate.dart';
 import 'package:note_warden/utils/enums.dart';
 import 'package:note_warden/widgets/collection_list_shimmer.dart';
 import 'package:note_warden/widgets/empty_list_guide.dart';
@@ -85,6 +86,13 @@ class _CollectionsViewState extends State<CollectionsView> {
         title: const Text("Note Warden"),
         // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions:  [
+          IconButton(
+            icon: const Icon(Icons.search,),
+            tooltip: "Search",
+            onPressed: () {
+              showSearch(context: context, delegate: CollectionSearchDelegate());
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.settings,),
             tooltip: "Settings",

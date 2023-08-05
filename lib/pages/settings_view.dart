@@ -54,7 +54,7 @@ class SettingsView extends StatelessWidget {
                 SettingsTile(
                   leading: Icon(Icons.mail),
                   title: Text('Invite Friends'),
-                  onPressed: (context){
+                  onPressed: (context) {
                     channel.invokeMethod("inviteFriends");
                   },
                 ),
@@ -68,6 +68,21 @@ class SettingsView extends StatelessWidget {
                   title: Text('Theme'),
                   value: Text(viewModel.themeMode.name),
                   onPressed: (context) => showThemeDialog(context),
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: Text('FeedBack'),
+              tiles: [
+                SettingsTile(
+                  leading: Icon(Icons.bug_report),
+                  title: Text('I Spotted a Bug'),
+                  onPressed: (context) => Navigator.pushNamed(context, "/report",arguments: "Bug"),
+                ),
+                SettingsTile(
+                  leading: Icon(Icons.settings_suggest),
+                  title: Text('I Have a Suggestion'),
+                  onPressed: (context) => Navigator.pushNamed(context, "/report",arguments: "Suggestion"),
                 ),
               ],
             ),

@@ -7,8 +7,6 @@ import '../models/collection_model.dart';
 
 class CollectionProvider extends ChangeNotifier {
   List<Collection> _collections = [];
-  int _mediaCount = 0;
-
   final CollectionService collectionService;
   final CacheService cacheService;
 
@@ -21,8 +19,6 @@ class CollectionProvider extends ChangeNotifier {
 
   List<Collection> get collections => _collections;
 
-  int get mediaCount => _mediaCount;
-
   TaskState get addCollectionState => _addCollectionState;
 
   TaskState get loadCollectionsState => _loadCollectionsState;
@@ -34,7 +30,7 @@ class CollectionProvider extends ChangeNotifier {
       await collectionService.addCollection(name: name);
       _addCollectionState = TaskState.success;
       notifyListeners();
-      await Future.delayed(const Duration(milliseconds: 600));
+      // await Future.delayed(const Duration(milliseconds: 600));
       loadCollections();
     } catch (e) {
       _addCollectionState = TaskState.failure;
