@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "586271242480",
+    "project_id": "notewarden",
+    "storage_bucket": "notewarden.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:586271242480:android:32fc2105adcf65f53cea35",
+        "android_client_info": {
+          "package_name": "com.saffroncodes.notewarden"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "586271242480-7gp08i9ecqb9f2lln7dpd5hho24cvmlf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFOllaMez_Ut5WdduV4ukg-dIbjwZQyKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "586271242480-7gp08i9ecqb9f2lln7dpd5hho24cvmlf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
