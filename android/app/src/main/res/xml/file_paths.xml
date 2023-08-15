@@ -1,0 +1,6 @@
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <root-path name="root" path="/" />
+    <files-path name="files" path="." />
+    <files-path name="Download" path="Download/" />
+    <external-path name="external_files" path="."/>
+</paths>
