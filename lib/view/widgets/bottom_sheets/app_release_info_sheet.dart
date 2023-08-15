@@ -37,7 +37,7 @@ class AppReleaseInfoSheet extends StatelessWidget {
           Divider(),
           // SizedBox(height: 16),
           MarkdownBody(
-            data: md,
+            data: md.substring(md.indexOf("\n"), md.length),
             styleSheet: MarkdownStyleSheet(),
           ),
           // SizedBox(height: 16),
@@ -49,7 +49,7 @@ class AppReleaseInfoSheet extends StatelessWidget {
                 child: Text('Ignore'),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: onclick,
                 child: Text("Let's Go"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,

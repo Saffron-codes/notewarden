@@ -5,19 +5,24 @@ import 'package:http/http.dart' as http;
 import 'package:note_warden/models/github_response.dart';
 import 'package:note_warden/view/widgets/bottom_sheets/app_release_info_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:logger/logger.dart';
 
 class AppUpdater {
   final http.Client client;
   final String curVersion;
   String md = "", version = "";
 
-  AppUpdater(this.client, this.curVersion);
+  late Logger logger;
+
+  AppUpdater(this.client, this.curVersion) {
+    logger = Logger();
+  }
 
   void check(String repo, bool isReceivingBeta, BuildContext context) async {
     if (isReceivingBeta) {
+      logger.i("Getting Beta Update");
       final response = await client
           .get(Uri.parse("https://api.github.com/repos/$repo/releases"));
-      // print(response.body);
       final releasesData = json.decode(response.body) as List<dynamic>;
       final releases = releasesData
           .map((release) => GithubResponse.fromJson(release))
@@ -41,8 +46,9 @@ class AppUpdater {
         version = v;
       }
     } else {
+      logger.i("Getting Stable Update");
       // No prelease found so update to stable release
-      updateStableVersion(repo);
+      await updateStableVersion(repo);
     }
 
     if (compareVersion(version, curVersion)) {
@@ -98,11 +104,11 @@ class AppUpdater {
     }
   }
 
-  void updateStableVersion(String repo) async {
+  Future<void> updateStableVersion(String repo) async {
     final response = await client.get(
         Uri.parse("https://raw.githubusercontent.com/$repo/master/stable.md"));
     final res = response.body;
     md = res;
-    version = res.substring(res.indexOf("# ") + 1, res.indexOf("\n"));
+    version = res.substring(res.indexOf("#") + 1, res.indexOf("\n")).trim();
   }
 }
