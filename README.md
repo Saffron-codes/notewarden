@@ -3,7 +3,8 @@
   <h1 align="center">Note Warden</h1>
 </p>
 
-Note Warden is a user-friendly and efficient app that allows users to conveniently store and manage various types of notes, including images and PDFs. It is designed for students and individuals who deal with files.
+Note Warden is a user-friendly app that allows users to conveniently store and manage various types of notes, including images and PDFs. 
+<!-- It is designed for students and individuals who deal with files. -->
 
 <img width="1012" alt="github-banner" src="./assets/Note%20Warden.png" style="border-radius: 10px;">
 
