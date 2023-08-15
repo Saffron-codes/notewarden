@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:note_warden/providers/collection_provider.dart';
+import 'package:note_warden/view/providers/collection_provider.dart';
 import 'package:note_warden/search/collection_search/collection_search_delegate.dart';
 import 'package:note_warden/utils/enums.dart';
-import 'package:note_warden/widgets/collection_list_shimmer.dart';
-import 'package:note_warden/widgets/empty_list_guide.dart';
+import 'package:note_warden/view/widgets/collection_list_shimmer.dart';
+import 'package:note_warden/view/widgets/empty_list_guide.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/app_updater_viewmodel.dart';
 import '../widgets/collection_tile.dart';
 
 class CollectionsView extends StatefulWidget {
-  CollectionsView({Key? key}) : super(key: key);
+  const CollectionsView({Key? key}) : super(key: key);
 
   @override
   State<CollectionsView> createState() => _CollectionsViewState();
@@ -17,6 +18,7 @@ class CollectionsView extends StatefulWidget {
 
 class _CollectionsViewState extends State<CollectionsView> {
   final TextEditingController nameController = TextEditingController();
+  
 
   Future<void> showAddDialog(BuildContext context) {
     return showDialog(
@@ -48,10 +50,6 @@ class _CollectionsViewState extends State<CollectionsView> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          style: ElevatedButton.styleFrom(
-            // backgroundColor: Theme.of(context).colorScheme.error, 
-            // foregroundColor: Theme.of(context).colorScheme.onError,
-          ),
           child: const Text("Cancel"),
         ),
         ElevatedButton(
@@ -76,6 +74,7 @@ class _CollectionsViewState extends State<CollectionsView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<CollectionProvider>(context, listen: false).loadCollections();
+      Provider.of<AppUpdaterViewModel>(context,listen: false).showBottomSheetDialog(context);
     });
   }
 

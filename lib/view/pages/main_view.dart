@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:note_warden/pages/collections_view.dart';
-import 'package:note_warden/pages/select_collections_view.dart';
-import 'package:note_warden/pages/splash_view.dart';
+import 'package:note_warden/view/pages/collections_view.dart';
+import 'package:note_warden/view/pages/select_collections_view.dart';
+import 'package:note_warden/view/pages/splash_view.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-
 import '../providers/shared_media_provider.dart';
 
 class MainView extends StatelessWidget {
@@ -22,6 +21,7 @@ class MainView extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SplashView();
         }
+        
 
         if (snapshot.hasData) {
           final files = snapshot.data;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:note_warden/providers/collection_provider.dart';
-import 'package:note_warden/providers/settings_provider.dart';
+import 'package:note_warden/view/providers/collection_provider.dart';
+import 'package:note_warden/view/providers/settings_provider.dart';
 import 'package:note_warden/utils/enums.dart';
 import 'package:provider/provider.dart';
 

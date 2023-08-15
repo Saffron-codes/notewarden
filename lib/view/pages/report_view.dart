@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:note_warden/providers/report_provider.dart';
+import 'package:note_warden/view/providers/report_provider.dart';
 import 'package:note_warden/utils/enums.dart';
 import 'package:provider/provider.dart';
 

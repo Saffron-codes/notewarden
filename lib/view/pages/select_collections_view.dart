@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:note_warden/providers/collection_provider.dart';
-import 'package:note_warden/widgets/collection_tile.dart';
+import 'package:note_warden/view/providers/collection_provider.dart';
+import 'package:note_warden/view/widgets/collection_tile.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/enums.dart';
+import '../../utils/enums.dart';
 
 class SelectCollectionsView extends StatefulWidget {
   const SelectCollectionsView({Key? key}) : super(key: key);

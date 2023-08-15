@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:note_warden/models/collection_model.dart';
-import 'package:note_warden/providers/collection_provider.dart';
-import 'package:note_warden/widgets/dialogs/confirmation_dialog.dart';
+import 'package:note_warden/view/providers/collection_provider.dart';
+import 'package:note_warden/view/widgets/dialogs/confirmation_dialog.dart';
 import 'package:provider/provider.dart';
 
 class CollectionOptionsSheet extends StatelessWidget {

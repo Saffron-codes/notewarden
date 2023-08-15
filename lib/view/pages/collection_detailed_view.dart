@@ -2,15 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:note_warden/injection_container.dart';
-import 'package:note_warden/providers/media_provider.dart';
+import 'package:note_warden/view/providers/media_provider.dart';
 import 'package:note_warden/services/file_picker_service.dart';
 import 'package:note_warden/utils/enums.dart';
-import 'package:note_warden/widgets/empty_list_guide.dart';
-import 'package:note_warden/widgets/media_list_shimmer.dart';
-import 'package:note_warden/widgets/pdf_card.dart';
+import 'package:note_warden/view/widgets/empty_list_guide.dart';
+import 'package:note_warden/view/widgets/media_list_shimmer.dart';
+import 'package:note_warden/view/widgets/pdf_card.dart';
 import 'package:provider/provider.dart';
 
-import '../models/collection_model.dart';
+import '../../models/collection_model.dart';
 
 class CollectionDetailedView extends StatefulWidget {
   const CollectionDetailedView({super.key});

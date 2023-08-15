@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:note_warden/models/collection_model.dart';
-import 'package:note_warden/providers/shared_media_provider.dart';
-import 'package:note_warden/providers/media_provider.dart';
+import 'package:note_warden/view/providers/shared_media_provider.dart';
+import 'package:note_warden/view/providers/media_provider.dart';
 import 'package:note_warden/utils/enums.dart';
-import 'package:note_warden/widgets/image_preview.dart';
-import 'package:note_warden/widgets/media_grid_view.dart';
+import 'package:note_warden/view/widgets/image_preview.dart';
+import 'package:note_warden/view/widgets/media_grid_view.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 

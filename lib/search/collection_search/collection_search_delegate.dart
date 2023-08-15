@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_warden/models/collection_model.dart';
-import 'package:note_warden/providers/collection_provider.dart';
+import 'package:note_warden/view/providers/collection_provider.dart';
 import 'package:provider/provider.dart';
 
 class CollectionSearchDelegate extends SearchDelegate {

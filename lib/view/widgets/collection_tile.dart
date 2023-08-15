@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:note_warden/models/collection_model.dart';
-import 'package:note_warden/providers/settings_provider.dart';
+import 'package:note_warden/view/providers/settings_provider.dart';
 import 'package:note_warden/utils/enums.dart';
-import 'package:note_warden/widgets/bottom_sheets/collection_options_sheet.dart';
+import 'package:note_warden/view/widgets/bottom_sheets/collection_options_sheet.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/convert_to_ago.dart';
+import '../../utils/convert_to_ago.dart';
 
 class CollectionTile extends StatelessWidget {
   final Collection collection;

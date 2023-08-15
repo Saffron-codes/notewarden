@@ -3,8 +3,8 @@ import 'package:note_warden/models/media.dart';
 import 'package:note_warden/services/media_service.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
-import '../models/collection_model.dart';
-import '../utils/enums.dart';
+import '../../models/collection_model.dart';
+import '../../utils/enums.dart';
 
 class MediaProvider extends ChangeNotifier {
   List<Media> _media = [];

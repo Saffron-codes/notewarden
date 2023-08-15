@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-import '../../models/media.dart';
-import '../../utils/convert_to_ago.dart';
+import '../../../models/media.dart';
+import '../../../utils/convert_to_ago.dart';
 
 class MediaInfoDialog extends StatelessWidget {
   final Media media;

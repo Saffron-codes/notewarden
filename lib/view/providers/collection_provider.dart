@@ -3,7 +3,7 @@ import 'package:note_warden/services/cache_service.dart';
 import 'package:note_warden/services/collection_service.dart';
 import 'package:note_warden/utils/enums.dart';
 
-import '../models/collection_model.dart';
+import '../../models/collection_model.dart';
 
 class CollectionProvider extends ChangeNotifier {
   List<Collection> _collections = [];

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:note_warden/providers/settings_provider.dart';
-import 'package:note_warden/widgets/bottom_sheets/developer_story_sheet.dart';
-import 'package:note_warden/widgets/dialogs/collections_order_dialog.dart';
-import 'package:note_warden/widgets/dialogs/theme_dialog.dart';
+import 'package:note_warden/view/providers/settings_provider.dart';
+import 'package:note_warden/view/widgets/bottom_sheets/developer_story_sheet.dart';
+import 'package:note_warden/view/widgets/dialogs/collections_order_dialog.dart';
+import 'package:note_warden/view/widgets/dialogs/theme_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -77,18 +77,28 @@ class SettingsView extends StatelessWidget {
                 SettingsTile(
                   leading: Icon(Icons.bug_report),
                   title: Text('I Spotted a Bug'),
-                  onPressed: (context) => Navigator.pushNamed(context, "/report",arguments: "Bug"),
+                  onPressed: (context) =>
+                      Navigator.pushNamed(context, "/report", arguments: "Bug"),
                 ),
                 SettingsTile(
                   leading: Icon(Icons.settings_suggest),
                   title: Text('I Have a Suggestion'),
-                  onPressed: (context) => Navigator.pushNamed(context, "/report",arguments: "Suggestion"),
+                  onPressed: (context) => Navigator.pushNamed(
+                      context, "/report",
+                      arguments: "Suggestion"),
                 ),
               ],
             ),
             SettingsSection(
               title: Text("About"),
               tiles: [
+                SettingsTile.switchTile(
+                  initialValue: viewModel.isReceivingBetaUpdates,
+                  onToggle: (val) => viewModel.isReceivingBetaUpdates = val,
+                  leading: Icon(Icons.new_releases),
+                  title: Text("Receive Beta updates"),
+                  description: Text("Beta builds from Github"),
+                ),
                 SettingsTile(
                   leading: Icon(Icons.developer_mode_rounded),
                   title: Text('Developer'),

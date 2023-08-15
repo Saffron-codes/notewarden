@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:note_warden/models/media.dart';
-import 'package:note_warden/providers/media_provider.dart';
-import 'package:note_warden/widgets/dialogs/confirmation_dialog.dart';
-import 'package:note_warden/widgets/dialogs/file_info_dialog.dart';
+import 'package:note_warden/view/providers/media_provider.dart';
+import 'package:note_warden/view/widgets/dialogs/confirmation_dialog.dart';
+import 'package:note_warden/view/widgets/dialogs/file_info_dialog.dart';
 import 'package:provider/provider.dart';
 
 class MediaDetailedView extends StatefulWidget {

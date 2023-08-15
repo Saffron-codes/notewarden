@@ -15,15 +15,23 @@ class SettingsProvider extends ChangeNotifier {
 
   ListOrder _listorder = ListOrder.byCreation;
 
+  bool _isReceivingBetaUpdates = false;
+
   set themeMode(ThemeMode val) {
     cacheService.setData("theme", val.name);
     _themeMode = val;
     notifyListeners();
   }
 
-  set listorder(ListOrder val){
+  set listorder(ListOrder val) {
     cacheService.setData("listorder", val.name);
     _listorder = val;
+    notifyListeners();
+  }
+
+  set isReceivingBetaUpdates(bool val) {
+    cacheService.setBetaUpdatesOption(val);
+    _isReceivingBetaUpdates = val;
     notifyListeners();
   }
 
@@ -33,13 +41,12 @@ class SettingsProvider extends ChangeNotifier {
 
   ListOrder get listorder => _listorder;
 
+  bool get isReceivingBetaUpdates => _isReceivingBetaUpdates;
 
-
-  String getListOrder(){
-    if(_listorder == ListOrder.byCreation){
+  String getListOrder() {
+    if (_listorder == ListOrder.byCreation) {
       return "By time of creation";
-    }
-    else{
+    } else {
       return "By time of modification";
     }
   }
@@ -47,6 +54,8 @@ class SettingsProvider extends ChangeNotifier {
   void _init() {
     final val = cacheService.getData('theme');
     final listorder = cacheService.getData('listorder');
+    _isReceivingBetaUpdates = cacheService.isReceivingBeta() ?? false;
+    notifyListeners();
     if (val.isNotEmpty) {
       if (val == "system") {
         _themeMode = ThemeMode.system;
@@ -62,12 +71,11 @@ class SettingsProvider extends ChangeNotifier {
       _themeMode = ThemeMode.system;
       notifyListeners();
     }
-    if(listorder.isNotEmpty){
-      if(listorder == "byCreation"){
+    if (listorder.isNotEmpty) {
+      if (listorder == "byCreation") {
         _listorder = ListOrder.byCreation;
         notifyListeners();
-      }
-      else{
+      } else {
         _listorder = ListOrder.byModification;
         notifyListeners();
       }

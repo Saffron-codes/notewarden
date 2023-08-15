@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/media.dart';
+import '../../models/media.dart';
 
 class PDFCard extends StatelessWidget {
   final Media pdfInfo;
