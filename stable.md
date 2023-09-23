@@ -3,5 +3,5 @@
 - Media & DB restored even after fresh installing
 - Small Bug Fixes
 
-Note
+## Note
 Since this is a major release your old media will be deleted
