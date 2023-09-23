@@ -1,0 +1,4 @@
+enum CollectionOrder {
+  byCreation,
+  byModification,
+}

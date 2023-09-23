@@ -1,5 +1,4 @@
-# 1.1.0
+# 1.2.0
 
-- Fixed unwanted loading in home screen
-- Update manager for github releases
-- Beta updates option
+- Media & DB restored even after fresh installing
+- Small Bug Fixes
