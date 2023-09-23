@@ -1,87 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_warden/injection_container.dart';
-import 'package:note_warden/services/app_updater.dart';
-import 'package:note_warden/view/pages/confirm_images_view.dart';
-import 'package:note_warden/view/pages/main_view.dart';
-import 'package:note_warden/view/pages/media_detailed_view.dart';
-import 'package:note_warden/view/pages/pdf_preview_view.dart';
-import 'package:note_warden/view/pages/report_view.dart';
-import 'package:note_warden/view/providers/app_updater_viewmodel.dart';
-import 'package:note_warden/view/providers/collection_provider.dart';
-import 'package:note_warden/view/providers/report_provider.dart';
-import 'package:note_warden/view/providers/settings_provider.dart';
-import 'package:note_warden/view/providers/shared_media_provider.dart';
-import 'package:note_warden/view/providers/media_provider.dart';
-import 'package:note_warden/services/cache_service.dart';
-import 'package:note_warden/services/collection_service.dart';
-import 'package:note_warden/services/media_service.dart';
-import 'package:note_warden/services/report_service.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:provider/provider.dart';
-import 'package:note_warden/view/pages/collection_detailed_view.dart';
-import 'package:note_warden/view/pages/select_collections_view.dart';
+import 'package:note_warden/feature_app_updater/presentation/app_updater_bloc/app_updater_bloc.dart';
+import 'package:note_warden/feature_collection/domain/use_case/collection_usecase.dart';
+import 'package:note_warden/feature_collection/domain/use_case/search_collection.dart';
+import 'package:note_warden/feature_collection/presentation/collection_search/collection_search_bloc/collection_search_bloc.dart';
+import 'package:note_warden/feature_collection/presentation/collections/collections_bloc/collections_bloc.dart';
+import 'package:note_warden/feature_collection/presentation/collections/collections_view.dart';
+import 'package:note_warden/feature_media/domain/use_case/media_use_case.dart';
+import 'package:note_warden/feature_media/presentation/media_list/media_bloc/media_bloc.dart';
+import 'package:note_warden/feature_media/presentation/media_list/media_list.dart';
+import 'package:note_warden/feature_media/presentation/receive_media/pages/confirm_media_view.dart';
+import 'package:note_warden/feature_media/presentation/receive_media/pages/receive_media_view.dart';
+import 'package:note_warden/feature_media/presentation/receive_media/receive_media_cubit/receive_media_cubit.dart';
+import 'package:note_warden/feature_report/presentation/pages/submit_report_view.dart';
+import 'package:note_warden/feature_report/presentation/report_cubit/report_cubit.dart';
+import 'package:note_warden/feature_settings/domain/use_case/settings_use_case.dart';
+import 'package:note_warden/feature_settings/presentation/pages/settings_view.dart';
+import 'package:note_warden/feature_settings/presentation/settings_cubit/settings_cubit.dart';
+import 'package:note_warden/feature_settings/presentation/settings_cubit/settings_state.dart';
 
-import 'view/pages/collections_view.dart';
-import 'view/pages/settings_view.dart';
+import 'feature_media/presentation/media_detailed/media_detailed_view.dart';
+import 'feature_media/presentation/pdf_preview/pdf_preview.dart';
 
-class NoteWarden extends StatelessWidget {
-  const NoteWarden({super.key});
+class AppBloc extends StatelessWidget {
+  const AppBloc({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => CollectionProvider(
-            collectionService: sl<CollectionService>(),
-            cacheService: sl<CacheService>()
-          ),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => SharedMediaProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => MediaProvider(mediaService: sl<MediaService>()),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => SettingsProvider(cacheService: sl<CacheService>(),packageInfo: sl<PackageInfo>()),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ReportProvider(reportService: sl<ReportService>()),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => AppUpdaterViewModel(sl<CacheService>(), sl<AppUpdater>()),
-        )
+        BlocProvider(create: (_) => ReceiveMediaCubit()),
+        BlocProvider(
+            create: (_) => CollectionsBloc(sl<CollectionUseCase>())
+              ..add(GetCollections())),
+        BlocProvider(
+            create: (_) => CollectionSearchBloc(sl<SearchCollection>())),
+        BlocProvider(create: (_) => MediaBloc(sl<MediaUseCase>())),
+        BlocProvider(create: (_) => SettingsCubit(sl<SettingsUseCase>(), sl())),
+        BlocProvider(create: (_) => ReportCubit(sl())),
+        BlocProvider(
+            create: (_) =>
+                AppUpdaterBloc(sl())..add(CheckBetaConfirmationEvent()))
       ],
-      child: Consumer<SettingsProvider>(
-        builder: (context,viewModel,child) {
+      child: BlocBuilder<SettingsCubit, AppSettingsState>(
+        builder: (context, state) {
           return MaterialApp(
-            title: 'Note Warden',
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
-              useMaterial3: true,
-              
-            ),
-            darkTheme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff0F547D),brightness: Brightness.dark,onPrimary: const Color(0xff2D2F31)),
-              useMaterial3: true,
-            ),
-            themeMode: viewModel.themeMode,
             initialRoute: "/",
+            themeMode: state.themeMode,
+            theme: ThemeData.light(useMaterial3: true),
+            darkTheme: ThemeData.dark(useMaterial3: true),
             routes: {
-              "/": (context) => const MainView(),
-              "/collections": (context) => CollectionsView(),
-              "/collection": (context) => const CollectionDetailedView(),
-              "/collection/choose": (context) => const SelectCollectionsView(),
-              "/confirm_images": (context) => const ConfirmImagesView(),
-              "/media/detailed":(context) => const MediaDetailedView(),
-              "/pdf":(context) => const PDFPreview(),
-              "/settings":(context) => const SettingsView(),
-              "/report":(context) => const ReportView()
+              "/": (context) => ReceiveMediaView(
+                    rootContext: context,
+                  ),
+              "/media": (context) => MediaList(),
+              "/media/detailed": (context) => MediaDetailedView(),
+              "/media/pdf": (context) => PDFPreview(),
+              "/media/confirm_media": (context) => ConfirmMediaView(),
+              "/collection": (context) => CollectionScreen(),
+              "/settings": (context) => SettingsView(),
+              "/report": (context) => SubmitReportView()
             },
           );
-        }
+        },
       ),
     );
   }

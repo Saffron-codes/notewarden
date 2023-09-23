@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:note_warden/app.dart';
 import 'injection_container.dart' as di;
+// import 'injection_container.dart' as di;
 
-import 'app.dart';
+// import 'app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await di.init();
 
-  runApp(const NoteWarden());
+  runApp(const AppBloc());
 }
