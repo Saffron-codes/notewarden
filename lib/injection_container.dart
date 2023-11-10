@@ -1,66 +1,60 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:note_warden/core/data/database_helper.dart';
-import 'package:note_warden/feature_app_updater/data/data_source/app_updater_data_source.dart';
-import 'package:note_warden/feature_app_updater/data/repository/app_updater_repository_impl.dart';
-import 'package:note_warden/feature_app_updater/domain/repository/app_updater_repository.dart';
-import 'package:note_warden/feature_app_updater/domain/use_case/app_updater_use_case.dart';
-import 'package:note_warden/feature_app_updater/domain/use_case/check_is_receiving_beta.dart';
-import 'package:note_warden/feature_app_updater/domain/use_case/check_update.dart';
-import 'package:note_warden/feature_app_updater/domain/use_case/download_apk.dart';
-import 'package:note_warden/feature_collection/data/data_source/collection_datasource.dart';
-import 'package:note_warden/feature_collection/data/repository/collection_repository_impl.dart';
-import 'package:note_warden/feature_collection/domain/repository/collection_repository.dart';
-import 'package:note_warden/feature_collection/domain/use_case/add_collection.dart';
-import 'package:note_warden/feature_collection/domain/use_case/collection_usecase.dart';
-import 'package:note_warden/feature_collection/domain/use_case/delete_collection.dart';
-import 'package:note_warden/feature_collection/domain/use_case/get_collections.dart';
-import 'package:note_warden/feature_collection/domain/use_case/search_collection.dart';
-import 'package:note_warden/feature_media/data/data_source/media_data_source.dart';
-import 'package:note_warden/feature_media/data/repository/media_repository_impl.dart';
-import 'package:note_warden/feature_media/domain/repository/media_repository.dart';
-import 'package:note_warden/feature_media/domain/use_case/delete_media.dart';
-import 'package:note_warden/feature_media/domain/use_case/get_media_list.dart';
-import 'package:note_warden/feature_media/domain/use_case/insert_media.dart';
-import 'package:note_warden/feature_media/domain/use_case/media_use_case.dart';
-import 'package:note_warden/feature_report/data/data_source/report_data_source.dart';
-import 'package:note_warden/feature_report/data/repository/report_repository_impl.dart';
-import 'package:note_warden/feature_report/domain/repository/report_repository.dart';
-import 'package:note_warden/feature_report/domain/use_case/submit_report.dart';
-import 'package:note_warden/feature_settings/data/data_source/settings_data_source.dart';
-import 'package:note_warden/feature_settings/data/repository/settings_repository_impl.dart';
-import 'package:note_warden/feature_settings/domain/repository/settings_repository.dart';
-import 'package:note_warden/feature_settings/domain/use_case/get_app_settings.dart';
-import 'package:note_warden/feature_settings/domain/use_case/set_app_settings.dart';
-import 'package:note_warden/feature_settings/domain/use_case/settings_use_case.dart';
-import 'package:note_warden/firebase_options.dart';
+import 'package:note_warden/features/feature_app_updater/data/data_source/app_updater_data_source.dart';
+import 'package:note_warden/features/feature_app_updater/data/repository/app_updater_repository_impl.dart';
+import 'package:note_warden/features/feature_app_updater/domain/repository/app_updater_repository.dart';
+import 'package:note_warden/features/feature_app_updater/domain/use_case/app_updater_use_case.dart';
+import 'package:note_warden/features/feature_app_updater/domain/use_case/check_is_receiving_beta.dart';
+import 'package:note_warden/features/feature_app_updater/domain/use_case/check_update.dart';
+import 'package:note_warden/features/feature_app_updater/domain/use_case/download_apk.dart';
+import 'package:note_warden/features/feature_media/data/data_source/media_data_source.dart';
+import 'package:note_warden/features/feature_media/domain/use_case/delete_media.dart';
+import 'package:note_warden/features/feature_media/domain/use_case/get_media_list.dart';
+import 'package:note_warden/features/feature_media/domain/use_case/insert_media.dart';
+import 'package:note_warden/features/feature_media/domain/use_case/media_use_case.dart';
+import 'package:note_warden/features/feature_settings/data/data_source/settings_data_source.dart';
+import 'package:note_warden/features/feature_settings/domain/use_case/get_app_settings.dart';
+import 'package:note_warden/features/feature_settings/domain/use_case/set_app_settings.dart';
+import 'package:note_warden/features/feature_settings/domain/use_case/settings_use_case.dart';
+import 'package:note_warden/features/feature_collection/domain/use_case/add_collection.dart';
+import 'package:note_warden/features/feature_collection/domain/use_case/get_collections.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+import 'features/feature_collection/data/data_source/collection_datasource.dart';
+import 'features/feature_collection/data/repository/collection_repository_impl.dart';
+import 'features/feature_collection/domain/repository/collection_repository.dart';
+import 'features/feature_collection/domain/use_case/collection_usecase.dart';
+import 'features/feature_collection/domain/use_case/delete_collection.dart';
+import 'features/feature_collection/domain/use_case/search_collection.dart';
+import 'features/feature_media/data/repository/media_repository_impl.dart';
+import 'features/feature_media/domain/repository/media_repository.dart';
+import 'features/feature_settings/data/repository/settings_repository_impl.dart';
+import 'features/feature_settings/domain/repository/settings_repository.dart';
 
 GetIt sl = GetIt.instance;
 
 Future<void> init() async {
   // Initialze .env file for firebase credentials
   await dotenv.load(fileName: ".env");
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   DatabaseHelper dbHelper = DatabaseHelper();
   Database db = await dbHelper.database;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   sl.registerSingleton<Database>(db);
 
   sl.registerFactory(() => sharedPreferences);
   sl.registerFactory(() => packageInfo);
-  sl.registerFactory(() => firestore);
+  // sl.registerFactory(() => firestore);
 
   // Data sources
   sl.registerLazySingleton<CollectionDataSource>(
@@ -71,8 +65,8 @@ Future<void> init() async {
 
   sl.registerLazySingleton<MediaDataSource>(() => MediaDataSourceImpl(db));
 
-  sl.registerLazySingleton<ReportDataSource>(
-      () => ReportDataSourceImpl(sl(), sl()));
+  // sl.registerLazySingleton<ReportDataSource>(
+  //     () => ReportDataSourceImpl(sl(), sl()));
 
   sl.registerLazySingleton<AppUpdaterDataSource>(
       () => AppUpdaterDataSourceImpl(sl(), sl(), sl()));
@@ -87,7 +81,7 @@ Future<void> init() async {
   sl.registerLazySingleton<SettingsRepository>(
       () => SettingsRepositoryImpl(sl()));
 
-  sl.registerLazySingleton<ReportRepository>(() => ReportRepositoryImpl(sl()));
+  // sl.registerLazySingleton<ReportRepository>(() => ReportRepositoryImpl(sl()));
 
   sl.registerLazySingleton<AppUpdaterRepository>(
       () => AppUpdaterRepositoryImpl(sl()));
@@ -130,7 +124,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetAppSettings(sl()));
   sl.registerLazySingleton(() => SetAppSettings(sl()));
 
-  sl.registerLazySingleton(() => SubmitReport(sl()));
+  // sl.registerLazySingleton(() => SubmitReport(sl()));
 
   sl.registerLazySingleton(() => CheckIsReceivingBeta(sl()));
   sl.registerLazySingleton(() => CheckUpdate(sl()));

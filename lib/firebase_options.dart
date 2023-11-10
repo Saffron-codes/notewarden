@@ -34,10 +34,11 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
+      // throw UnsupportedError(
+      //   'DefaultFirebaseOptions have not been configured for windows - '
+      //   'you can reconfigure this by running the FlutterFire CLI again.',
+      // );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -50,7 +51,7 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static  FirebaseOptions web = FirebaseOptions(
+  static FirebaseOptions web = FirebaseOptions(
     apiKey: dotenv.env["API_KEY"].toString(),
     appId: '1:586271242480:web:a38e966b0a4e2b613cea35',
     messagingSenderId: dotenv.env["MSG_SENDER_ID"].toString(),
@@ -60,7 +61,7 @@ class DefaultFirebaseOptions {
     measurementId: 'G-BVNQL9DHD7',
   );
 
-  static  FirebaseOptions android = FirebaseOptions(
+  static FirebaseOptions android = FirebaseOptions(
     apiKey: dotenv.env["API_KEY"].toString(),
     appId: dotenv.env["APP_ID"].toString(),
     messagingSenderId: dotenv.env["MSG_SENDER_ID"].toString(),

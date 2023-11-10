@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:go_router/go_router.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;
@@ -13,24 +14,20 @@ class ConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return ContentDialog(
       title: Text(title),
       content: Text(content),
       actions: [
-        ElevatedButton(
+        FilledButton(
+          onPressed: onPressedOK,
+          child: const Text("Delete"),
+        ),
+        Button(
           onPressed: () {
-            Navigator.of(context).pop();
+            context.pop();
           },
           child: const Text("Cancel"),
         ),
-        ElevatedButton(
-          onPressed: onPressedOK,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          ),
-          child: const Text("Delete"),
-        )
       ],
     );
   }
