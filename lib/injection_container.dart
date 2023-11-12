@@ -1,4 +1,4 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:note_warden/core/data/database_helper.dart';
 import 'package:note_warden/features/feature_app_updater/data/data_source/app_updater_data_source.dart';
@@ -40,7 +40,7 @@ GetIt sl = GetIt.instance;
 
 Future<void> init() async {
   // Initialze .env file for firebase credentials
-  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: ".env");
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
